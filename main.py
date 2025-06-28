@@ -1,7 +1,7 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, redirect
 import stripe
-import json
 import os
+import json
 
 app = Flask(__name__)
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY', 'sk_test_yourkeyhere')
@@ -67,7 +67,7 @@ def create_checkout():
 
 @app.route('/')
 def index():
-    return "NoCodePay is live and listening 🚀"
+    return 'NoCodePay is live 🚀'
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=10000)
+    app.run(debug=True)
