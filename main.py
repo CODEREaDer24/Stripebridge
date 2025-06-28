@@ -70,3 +70,6 @@ if __name__ == '__main__':
     @app.route('/')
 def index():
     return "NoCodePay is live and listening 🚀"
+    @app.route('/')
+def index():
+    return "NoCodePay is live and listening 🚀"
