@@ -65,11 +65,9 @@ def create_checkout():
     )
     return jsonify({"url": session.url})
 
+@app.route('/')
+def index():
+    return "NoCodePay is live and listening 🚀"
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)
-    @app.route('/')
-def index():
-    return "NoCodePay is live and listening 🚀"
-    @app.route('/')
-def index():
-    return "NoCodePay is live and listening 🚀"
