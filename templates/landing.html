@@ -1,46 +1,146 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>NoCodePay – Get Paid Fast</title>
-  <link rel="stylesheet" href="/static/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NoCodePay</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(135deg, #1e3a8a, #0ea5e9);
+      color: white;
+    }
+    header {
+      padding: 2rem;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 3rem;
+    }
+    header p {
+      font-size: 1.2rem;
+      margin: 1rem 0;
+    }
+    .cta {
+      background-color: #10b981;
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 1rem;
+    }
+    section {
+      padding: 3rem 1rem;
+      max-width: 800px;
+      margin: auto;
+    }
+    .tiers, .dashboard, .stripe-connect {
+      margin-top: 3rem;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2rem;
+      border-radius: 12px;
+    }
+    .tiers h2, .dashboard h2, .stripe-connect h2 {
+      margin-top: 0;
+    }
+    .tier-grid {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .tier {
+      background: white;
+      color: #111;
+      border-radius: 10px;
+      padding: 1.5rem;
+      flex: 1 1 200px;
+      min-width: 220px;
+      text-align: center;
+    }
+    .tier h3 {
+      margin: 0;
+    }
+    .tier p {
+      font-size: 0.9rem;
+      color: #333;
+    }
+    .stripe-connect button {
+      background: #6366f1;
+      color: white;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    .dashboard .link-list {
+      margin-top: 1rem;
+    }
+    .link-item {
+      background: white;
+      color: #111;
+      padding: 0.75rem;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .link-item button {
+      background: #10b981;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  <header class="hero">
-    <div class="hero-content">
-      <h1>NoCodePay</h1>
-      <p>Generate payment links instantly. No code, no friction. Just Stripe.</p>
-      <a href="/login" class="cta-button">Connect with Stripe</a>
-      <div class="stripe-trust">
-        <img src="https://stripe.com/img/v3/home/twitter.png" alt="Stripe Trusted">
-        <p>Backed by Stripe Connect</p>
+  <header>
+    <h1>NoCodePay</h1>
+    <p>Collect payments. Skip the code. Powered by Stripe.</p>
+    <a href="#connect" class="cta">Connect Stripe</a>
+  </header>  <section class="stripe-connect" id="connect">
+    <h2>🔐 Stripe OAuth Live</h2>
+    <p>Click below to connect your Stripe account and begin accepting payments immediately.</p>
+    <button onclick="alert('Redirecting to Stripe Connect (not wired in this demo)')">Connect Stripe</button>
+  </section>  <section class="tiers">
+    <h2>💸 Choose Your Plan</h2>
+    <div class="tier-grid">
+      <div class="tier">
+        <h3>Starter</h3>
+        <p>$9.99/mo<br>1 Payment Link<br>Copy & Embed Tools</p>
+      </div>
+      <div class="tier">
+        <h3>Pro</h3>
+        <p>$19.99/mo<br>5 Payment Links<br>Analytics Dashboard</p>
+      </div>
+      <div class="tier">
+        <h3>Team</h3>
+        <p>$49.99/mo<br>15 Links<br>AI Recommendations</p>
       </div>
     </div>
-  </header>
-
-  <section class="features">
-    <div class="feature">
-      <h2>🧾 Payment Links</h2>
-      <p>Create Stripe-hosted links in seconds without code or setup.</p>
+  </section>  <section class="dashboard">
+    <h2>📊 Your Dashboard (Sample)</h2>
+    <div class="link-list">
+      <div class="link-item">
+        <span>https://nocodepay.xyz/pay?amount=25.00&note=Consulting</span>
+        <button>Copy</button>
+      </div>
+      <div class="link-item">
+        <span>https://nocodepay.xyz/pay?amount=49.99&note=Design</span>
+        <button>Copy</button>
+      </div>
     </div>
-    <div class="feature">
-      <h2>📊 Your Dashboard</h2>
-      <p>See all your links in one place with performance and click tracking.</p>
-    </div>
-    <div class="feature">
-      <h2>⚡ No Setup</h2>
-      <p>Just log in with your Stripe account — we handle the rest.</p>
-    </div>
-  </section>
-
-  <section class="pricing">
-    <h2>Pricing</h2>
-    <p><strong>Launch Offer:</strong> Free for your first 10 links. $9.99/month after.</p>
-  </section>
-
-  <footer>
-    <p>© 2025 NoCodePay. Powered by Stripe.</p>
+  </section>  <footer style="text-align:center; padding:2rem; font-size:0.8rem; color:#ccc;">
+    NoCodePay.xyz © 2025 — Built for the next generation of founders.
   </footer>
 </body>
 </html>
