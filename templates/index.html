@@ -2,190 +2,114 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NoCodePay – Secure Stripe Payments for No-Coders</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NoCodePay – Trusted Payments for No-Coders</title>
+  <meta name="description" content="NoCodePay helps non-coders collect secure payments using Stripe. No code required."/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       font-family: 'Outfit', sans-serif;
-      background-color: #fefefe;
-      color: #111;
+      background: linear-gradient(135deg, #1e3a8a, #10b981); /* blue to green gradient */
+      color: #f9fafb;
     }
     header {
-      background-color: #1f1f2e;
-      color: #fff;
       text-align: center;
-      padding: 2rem;
+      padding: 3rem 1rem;
     }
     header h1 {
       margin: 0;
       font-size: 2.5rem;
     }
-    .cta {
-      background: #f92672;
-      color: white;
-      font-weight: bold;
-      padding: 1rem 2rem;
-      text-decoration: none;
-      border-radius: 10px;
-      display: inline-block;
-      margin-top: 1.5rem;
+    header p {
+      margin-top: 1rem;
+      font-size: 1.2rem;
     }
-    .security-badge {
-      margin-top: 0.75rem;
-      font-size: 0.95rem;
-      color: #ccc;
+    .cta {
+      background: #facc15;
+      color: #1e293b;
+      font-weight: 700;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      margin-top: 1.5rem;
+      display: inline-block;
     }
     section {
-      padding: 2rem;
+      padding: 4rem 2rem;
       text-align: center;
     }
-    .form-box {
-      background: white;
-      max-width: 400px;
-      margin: 2rem auto;
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .feature {
+      background: rgba(255, 255, 255, 0.1);
       padding: 2rem;
       border-radius: 12px;
-      box-shadow: 0 0 12px rgba(0,0,0,0.06);
+      backdrop-filter: blur(4px);
     }
-    .form-box label {
-      font-weight: 600;
-      display: block;
-      text-align: left;
-      margin-bottom: 0.25rem;
-    }
-    .form-box input {
-      width: 100%;
-      padding: 0.75rem;
-      margin-bottom: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 1rem;
-    }
-    .form-box input:focus {
-      border-color: #f92672;
-      outline: none;
-    }
-    .form-box button {
-      background: #f92672;
-      color: white;
-      border: none;
-      padding: 0.8rem 1.5rem;
-      font-size: 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 1rem;
-    }
-    .output-box {
-      margin-top: 1.5rem;
-      font-family: monospace;
-      background: #f5f5f5;
-      padding: 1rem;
-      border-radius: 8px;
-      word-break: break-all;
-    }
-    .output-box a.button {
-      display: inline-block;
-      margin-top: 1rem;
-      background: #4caf50;
-      color: white;
-      padding: 0.6rem 1rem;
-      text-decoration: none;
-      border-radius: 6px;
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(0, 0, 0, 0.1);
       font-size: 0.9rem;
     }
-    .footer {
-      text-align: center;
-      padding: 2rem;
-      font-size: 0.85rem;
-      color: #777;
-    }
-    .lock-icon {
-      margin-left: 5px;
-      color: #4caf50;
-    }
-    .modal {
-      display: none;
-      position: fixed;
-      top: 10%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #fff;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.25);
-      max-width: 400px;
-      z-index: 9999;
-    }
-    .modal h3 {
-      margin-top: 0;
-    }
-    .modal-close {
-      background: #f92672;
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
+    .stripe-badge {
       margin-top: 1rem;
-      cursor: pointer;
+      font-size: 0.9rem;
+      opacity: 0.8;
     }
   </style>
 </head>
 <body>
   <header>
     <h1>NoCodePay</h1>
-    <p>Collect payments instantly with confidence</p>
-    <a class="cta" href="#">Start Now</a>
-    <div class="security-badge">
-      🔒 Secured by Stripe – <a href="#" onclick="showModal()">Why this is safe?</a>
-    </div>
+    <p>Collect payments confidently – no code, no stress, fully Stripe-powered.</p>
+    <a class="cta" href="#pricing">View Plans</a>
+    <div class="stripe-badge">🔒 Secured by Stripe • PCI Compliant</div>
   </header>
 
   <section>
-    <div class="form-box">
-      <label for="amount">Payment Amount ($)<span class="lock-icon">🔒</span></label>
-      <input type="text" id="amount" placeholder="e.g. 19.99" />
-
-      <label for="note">Payment Note<span class="lock-icon">🔒</span></label>
-      <input type="text" id="note" placeholder="e.g. Design Service" />
-
-      <button onclick="generateLink()">Generate Link + Button</button>
-
-      <div id="output" class="output-box"></div>
+    <h2>Why NoCodePay?</h2>
+    <div class="features">
+      <div class="feature">
+        <h3>🔗 Instant Payment Links</h3>
+        <p>Create and share payment links in seconds – with no dev team needed.</p>
+      </div>
+      <div class="feature">
+        <h3>📊 Dashboard Simplicity</h3>
+        <p>Track who paid, when, and what for. It’s all clear and accessible.</p>
+      </div>
+      <div class="feature">
+        <h3>📧 Smart Reminders</h3>
+        <p>We'll nudge your clients automatically – so you don’t have to chase.</p>
+      </div>
     </div>
   </section>
 
-  <div class="footer">
-    © 2025 NoCodePay.xyz — Secure payments for creators • Powered by Stripe
-  </div>
+  <section id="pricing">
+    <h2>Plans & Pricing</h2>
+    <div class="features">
+      <div class="feature">
+        <h3>Starter</h3>
+        <p>$9.99/mo<br>One product link, reminders included.</p>
+      </div>
+      <div class="feature">
+        <h3>Pro</h3>
+        <p>$19.99/mo<br>Up to 5 payment links, analytics, full branding.</p>
+      </div>
+      <div class="feature">
+        <h3>Team</h3>
+        <p>$49.99/mo<br>Unlimited links, roles, integrations, support.</p>
+      </div>
+    </div>
+  </section>
 
-  <div class="modal" id="secureModal">
-    <h3>Why this is safe</h3>
-    <p>We use Stripe – the most trusted payment processor – to handle all transactions. Your info never touches our servers.</p>
-    <p>Our links generate real Stripe-hosted checkouts, and you stay in full control of your account and products.</p>
-    <button class="modal-close" onclick="hideModal()">Close</button>
-  </div>
-
-  <script>
-    function showModal() {
-      document.getElementById("secureModal").style.display = "block";
-    }
-    function hideModal() {
-      document.getElementById("secureModal").style.display = "none";
-    }
-    function generateLink() {
-      const amt = document.getElementById("amount").value;
-      const note = document.getElementById("note").value;
-      const out = document.getElementById("output");
-      if (!amt || !note || !/^\d+\.\d{2}$/.test(amt)) {
-        out.innerHTML = "❗ Please enter a valid amount (e.g. 19.99) and a note.";
-        return;
-      }
-      const link = `https://nocodepay.xyz/pay?amount=${amt}&note=${encodeURIComponent(note)}`;
-      const button = `<a href="${link}" class="button">💳 Pay $${amt} for ${note}</a>`;
-      out.innerHTML = `<strong>Copy this button HTML:</strong><br><code>${button}</code><br><br>Preview:<br>${button}`;
-    }
-  </script>
+  <footer>
+    © 2025 NoCodePay.xyz • Secure payments for the rest of us.
+  </footer>
 </body>
 </html>
