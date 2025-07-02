@@ -1,190 +1,227 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>NoCodePay – Trusted Payments for No-Coders</title>
-  <meta name="description" content="NoCodePay helps non-coders collect secure payments using Stripe. No code required."/>
+  <title>NoCodePay – Secure Stripe Payments for No-Coders</title>
+  <meta name="description" content="NoCodePay helps no-code founders collect payments without writing a single line of code. Powered by Stripe.">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
+    :root {
+      --primary: #00695c;
+      --accent: #2196f3;
+      --light-bg: #f4f9f8;
+      --text-dark: #212121;
+    }
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
       font-family: 'Outfit', sans-serif;
-      background: linear-gradient(135deg, #1e3a8a, #10b981);
-      color: #f9fafb;
+      background-color: var(--light-bg);
+      color: var(--text-dark);
+      line-height: 1.6;
     }
     header {
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      color: white;
       text-align: center;
-      padding: 3rem 1rem;
+      padding: 2.5rem 1rem;
     }
     header h1 {
-      margin: 0;
-      font-size: 2.5rem;
+      font-size: 2.8rem;
+      margin-bottom: 0.5rem;
     }
     header p {
-      margin-top: 1rem;
       font-size: 1.2rem;
+      opacity: 0.9;
     }
     .cta {
-      background: #facc15;
-      color: #1e293b;
-      font-weight: 700;
-      padding: 0.75rem 1.5rem;
+      display: inline-block;
+      margin-top: 1.5rem;
+      background: white;
+      color: var(--primary);
+      padding: 0.8rem 1.6rem;
+      font-weight: bold;
       border-radius: 8px;
       text-decoration: none;
-      margin-top: 1.5rem;
-      display: inline-block;
     }
-    section {
-      padding: 4rem 2rem;
+    .section {
+      padding: 3rem 1.5rem;
       text-align: center;
     }
     .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
       gap: 2rem;
       margin-top: 2rem;
     }
     .feature {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 2rem;
-      border-radius: 12px;
-      backdrop-filter: blur(4px);
+      background: white;
+      border-radius: 10px;
+      padding: 1.5rem;
+      width: 300px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .feature h3 {
+      color: var(--primary);
+      margin-bottom: 0.5rem;
     }
     .demo-box {
-      background: rgba(255, 255, 255, 0.1);
+      background: white;
       padding: 2rem;
-      margin-top: 2rem;
-      border-radius: 12px;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
+      max-width: 450px;
+      margin: 2rem auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      text-align: left;
     }
     .demo-box label {
       display: block;
+      margin: 1rem 0 0.5rem;
       font-weight: 600;
-      margin-top: 1rem;
     }
     .demo-box input {
       width: 100%;
       padding: 0.75rem;
-      font-size: 1rem;
-      margin-top: 0.25rem;
-      border: none;
+      border: 1px solid #ccc;
       border-radius: 6px;
+      font-size: 1rem;
     }
     .demo-box button {
-      background: #facc15;
-      color: #1e293b;
-      font-weight: 600;
+      margin-top: 1.5rem;
+      background-color: var(--primary);
+      color: white;
       border: none;
-      padding: 0.75rem 1.25rem;
-      margin-top: 1rem;
+      padding: 0.8rem 1.2rem;
       border-radius: 6px;
+      font-size: 1rem;
       cursor: pointer;
     }
-    .output {
-      margin-top: 1.5rem;
-      background: #fff;
-      color: #1f2937;
+    .output-box {
+      margin-top: 1rem;
+      background: #e0f2f1;
       padding: 1rem;
       border-radius: 6px;
       font-family: monospace;
-      word-break: break-word;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .copy-btn {
-      background: #1e3a8a;
-      color: #fff;
+    .output-box button {
+      background: var(--accent);
+      color: white;
       border: none;
       padding: 0.4rem 0.8rem;
-      border-radius: 5px;
+      font-size: 0.9rem;
+      border-radius: 4px;
       cursor: pointer;
-      margin-left: 1rem;
     }
     footer {
+      background-color: #e0f2f1;
+      padding: 2rem 1rem;
       text-align: center;
-      padding: 2rem;
-      background: rgba(0, 0, 0, 0.2);
       font-size: 0.9rem;
+      color: #555;
+    }
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #4caf50;
+      color: white;
+      padding: 0.75rem 1.25rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      display: none;
     }
   </style>
 </head>
 <body>
+
   <header>
     <h1>NoCodePay</h1>
-    <p>Collect payments confidently – no code, no stress, fully Stripe-powered.</p>
-    <a class="cta" href="#pricing">View Plans</a>
-    <div class="stripe-badge">🔒 Secured by Stripe • PCI Compliant</div>
-  </header>  <section>
-    <h2>Why NoCodePay?</h2>
+    <p>Stripe payments. Zero code. All trust.</p>
+    <a href="#demo" class="cta">Generate Your Payment Link</a>
+  </header>
+
+  <section class="section">
+    <h2>🔒 Trusted, Simple, Secure</h2>
     <div class="features">
       <div class="feature">
-        <h3>🔗 Instant Payment Links</h3>
-        <p>Create and share payment links in seconds – no dev team needed.</p>
+        <h3>💸 Instant Checkout</h3>
+        <p>Share a secure payment link in seconds. No tech headaches.</p>
       </div>
       <div class="feature">
-        <h3>📊 Dashboard Simplicity</h3>
-        <p>Track who paid, when, and what for. It’s all clear and accessible.</p>
+        <h3>📈 Transparent Pricing</h3>
+        <p>Starter, Pro, or Team — you choose your lane and we keep it clean.</p>
       </div>
       <div class="feature">
-        <h3>📧 Smart Reminders</h3>
-        <p>We’ll follow up with your clients automatically – so you don’t have to.</p>
+        <h3>📊 Smart Dashboard</h3>
+        <p>Track payments, send reminders, and grow with confidence.</p>
       </div>
     </div>
-  </section>  <section id="pricing">
-    <h2>Plans & Pricing</h2>
-    <div class="features">
-      <div class="feature">
-        <h3>Starter</h3>
-        <p>$9.99/month<br>One product, basic dashboard.</p>
-      </div>
-      <div class="feature">
-        <h3>Pro</h3>
-        <p>$19.99/month<br>Five products, reminders & analytics.</p>
-      </div>
-      <div class="feature">
-        <h3>Team</h3>
-        <p>$49.99/month<br>Unlimited links, roles, support, integrations.</p>
-      </div>
-    </div>
-  </section>  <section id="demo">
-    <h2>Try It Now</h2>
+  </section>
+
+  <section class="section" id="demo">
+    <h2>🎯 Try the Demo</h2>
     <div class="demo-box">
-      <label>💵 Payment Amount (USD)</label>
-      <input type="text" id="amount" placeholder="e.g. 25.00" /><label>📝 Payment Note</label>
-  <input type="text" id="note" placeholder="e.g. Monthly Hosting" />
+      <label for="amount">Payment Amount ($)<br><small>💡 Please use two decimal places – every penny counts!</small></label>
+      <input type="text" id="amount" placeholder="e.g. 49.99">
 
-  <button onclick="generate()">Generate Link + Embed</button>
+      <label for="note">Payment Note</label>
+      <input type="text" id="note" placeholder="e.g. Strategy Call">
 
-  <div id="result"></div>
-</div>
+      <button onclick="generateLink()">Generate Link + Embed</button>
+      <div id="output"></div>
+    </div>
+  </section>
 
-  </section>  <footer>
-    © 2025 NoCodePay.xyz • Secure payments for the rest of us.
-  </footer>  <script>
-    function generate() {
-      const amt = document.getElementById('amount').value.trim();
-      const note = document.getElementById('note').value.trim();
-      const result = document.getElementById('result');
+  <footer>
+    &copy; 2025 NoCodePay.xyz • Secure Payments for No-Coders<br>
+    <a href="#">Terms</a> • <a href="#">Privacy</a>
+  </footer>
 
-      const valid = /^\d+\.\d{2}$/.test(amt);
-      if (!valid || !note) {
-        result.innerHTML = '<div class="output">❗ Invalid format. Use format like 25.00 and add a note.</div>';
+  <div id="toast" class="toast">✅ Copied to clipboard!</div>
+
+  <script>
+    function generateLink() {
+      const amount = document.getElementById('amount').value;
+      const note = document.getElementById('note').value;
+      const output = document.getElementById('output');
+
+      const validFormat = /^\d+\.\d{2}$/;
+      if (!validFormat.test(amount)) {
+        output.innerHTML = '❗ Invalid amount. Use format like 25.00';
         return;
       }
 
-      const url = `https://nocodepay.xyz/pay?amount=${amt}&note=${encodeURIComponent(note)}`;
-      const buttonCode = `<a href=\"${url}\" style=\"background:#6366f1;color:white;padding:12px 20px;border-radius:6px;text-decoration:none;\">Pay $${amt} for ${note}</a>`;
+      const link = `https://nocodepay.xyz/pay?amount=${amount}&note=${encodeURIComponent(note)}`;
+      const embed = `<a href="${link}" style="background:#2196f3;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;">Pay $${amount} for ${note}</a>`;
 
-      result.innerHTML = `
-        <div class="output">
-          Link: ${url}
-          <button class="copy-btn" onclick="navigator.clipboard.writeText('${url}')">Copy Link</button>
+      output.innerHTML = `
+        <div class="output-box">
+          <span id="link">${link}</span>
+          <button onclick="copyText('link')">Copy Link</button>
         </div>
-        <div class="output">
-          Embed Button: ${buttonCode}
-          <button class="copy-btn" onclick="navigator.clipboard.writeText(\`${buttonCode}\`)">Copy Button</button>
+        <div class="output-box" style="margin-top:1rem;">
+          <span id="embed">${embed}</span>
+          <button onclick="copyText('embed')">Copy Button</button>
         </div>
       `;
     }
-  </script></body>
+
+    function copyText(id) {
+      const text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const toast = document.getElementById('toast');
+        toast.style.display = 'block';
+        setTimeout(() => { toast.style.display = 'none'; }, 2000);
+      });
+    }
+  </script>
+</body>
 </html>
