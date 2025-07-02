@@ -10,7 +10,7 @@
     body {
       margin: 0;
       font-family: 'Outfit', sans-serif;
-      background: linear-gradient(135deg, #1e3a8a, #10b981); /* blue to green gradient */
+      background: linear-gradient(135deg, #1e3a8a, #10b981);
       color: #f9fafb;
     }
     header {
@@ -51,16 +51,61 @@
       border-radius: 12px;
       backdrop-filter: blur(4px);
     }
+    .demo-box {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2rem;
+      margin-top: 2rem;
+      border-radius: 12px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .demo-box label {
+      display: block;
+      font-weight: 600;
+      margin-top: 1rem;
+    }
+    .demo-box input {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      margin-top: 0.25rem;
+      border: none;
+      border-radius: 6px;
+    }
+    .demo-box button {
+      background: #facc15;
+      color: #1e293b;
+      font-weight: 600;
+      border: none;
+      padding: 0.75rem 1.25rem;
+      margin-top: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .output {
+      margin-top: 1.5rem;
+      background: #fff;
+      color: #1f2937;
+      padding: 1rem;
+      border-radius: 6px;
+      font-family: monospace;
+      word-break: break-word;
+    }
+    .copy-btn {
+      background: #1e3a8a;
+      color: #fff;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-left: 1rem;
+    }
     footer {
       text-align: center;
       padding: 2rem;
-      background: rgba(0, 0, 0, 0.1);
+      background: rgba(0, 0, 0, 0.2);
       font-size: 0.9rem;
-    }
-    .stripe-badge {
-      margin-top: 1rem;
-      font-size: 0.9rem;
-      opacity: 0.8;
     }
   </style>
 </head>
@@ -77,7 +122,7 @@
     <div class="features">
       <div class="feature">
         <h3>🔗 Instant Payment Links</h3>
-        <p>Create and share payment links in seconds – with no dev team needed.</p>
+        <p>Create and share payment links in seconds – no dev team needed.</p>
       </div>
       <div class="feature">
         <h3>📊 Dashboard Simplicity</h3>
@@ -85,7 +130,7 @@
       </div>
       <div class="feature">
         <h3>📧 Smart Reminders</h3>
-        <p>We'll nudge your clients automatically – so you don’t have to chase.</p>
+        <p>We’ll follow up with your clients automatically – so you don’t have to.</p>
       </div>
     </div>
   </section>
@@ -95,21 +140,64 @@
     <div class="features">
       <div class="feature">
         <h3>Starter</h3>
-        <p>$9.99/mo<br>One product link, reminders included.</p>
+        <p>$9.99/month<br>One product, basic dashboard.</p>
       </div>
       <div class="feature">
         <h3>Pro</h3>
-        <p>$19.99/mo<br>Up to 5 payment links, analytics, full branding.</p>
+        <p>$19.99/month<br>Five products, reminders & analytics.</p>
       </div>
       <div class="feature">
         <h3>Team</h3>
-        <p>$49.99/mo<br>Unlimited links, roles, integrations, support.</p>
+        <p>$49.99/month<br>Unlimited links, roles, support, integrations.</p>
       </div>
+    </div>
+  </section>
+
+  <section id="demo">
+    <h2>Try It Now</h2>
+    <div class="demo-box">
+      <label>💵 Payment Amount (USD)</label>
+      <input type="text" id="amount" placeholder="e.g. 25.00" />
+
+      <label>📝 Payment Note</label>
+      <input type="text" id="note" placeholder="e.g. Monthly Hosting" />
+
+      <button onclick="generate()">Generate Link + Embed</button>
+
+      <div id="result"></div>
     </div>
   </section>
 
   <footer>
     © 2025 NoCodePay.xyz • Secure payments for the rest of us.
   </footer>
+
+  <script>
+    function generate() {
+      const amt = document.getElementById('amount').value.trim();
+      const note = document.getElementById('note').value.trim();
+      const result = document.getElementById('result');
+
+      const valid = /^\d+\.\d{2}$/.test(amt);
+      if (!valid || !note) {
+        result.innerHTML = '<div class="output">❗ Invalid format. Use format like 25.00 and add a note.</div>';
+        return;
+      }
+
+      const url = `https://nocodepay.xyz/pay?amount=${amt}&note=${encodeURIComponent(note)}`;
+      const buttonCode = `<a href="${url}" style="background:#6366f1;color:white;padding:12px 20px;border-radius:6px;text-decoration:none;">Pay $${amt} for ${note}</a>`;
+
+      result.innerHTML = `
+        <div class="output">
+          Link: ${url}
+          <button class="copy-btn" onclick="navigator.clipboard.writeText('${url}')">Copy Link</button>
+        </div>
+        <div class="output">
+          Embed Button: ${buttonCode}
+          <button class="copy-btn" onclick="navigator.clipboard.writeText(\`${buttonCode}\`)">Copy Button</button>
+        </div>
+      `;
+    }
+  </script>
 </body>
 </html>
