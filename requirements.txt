@@ -1,2 +1,13 @@
-flask
-stripe
+/your-app
+│
+├── main.py
+├── requirements.txt
+├── .env             # optional for SECRET_KEY
+│
+├── /templates
+│   ├── index.html
+│   ├── dashboard.html
+│   └── request_trial.html
+│
+└── /static
+    └── (optional css, js, logos etc)
