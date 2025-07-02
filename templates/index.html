@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -115,9 +114,7 @@
     <p>Collect payments confidently – no code, no stress, fully Stripe-powered.</p>
     <a class="cta" href="#pricing">View Plans</a>
     <div class="stripe-badge">🔒 Secured by Stripe • PCI Compliant</div>
-  </header>
-
-  <section>
+  </header>  <section>
     <h2>Why NoCodePay?</h2>
     <div class="features">
       <div class="feature">
@@ -133,9 +130,7 @@
         <p>We’ll follow up with your clients automatically – so you don’t have to.</p>
       </div>
     </div>
-  </section>
-
-  <section id="pricing">
+  </section>  <section id="pricing">
     <h2>Plans & Pricing</h2>
     <div class="features">
       <div class="feature">
@@ -151,28 +146,21 @@
         <p>$49.99/month<br>Unlimited links, roles, support, integrations.</p>
       </div>
     </div>
-  </section>
-
-  <section id="demo">
+  </section>  <section id="demo">
     <h2>Try It Now</h2>
     <div class="demo-box">
       <label>💵 Payment Amount (USD)</label>
-      <input type="text" id="amount" placeholder="e.g. 25.00" />
+      <input type="text" id="amount" placeholder="e.g. 25.00" /><label>📝 Payment Note</label>
+  <input type="text" id="note" placeholder="e.g. Monthly Hosting" />
 
-      <label>📝 Payment Note</label>
-      <input type="text" id="note" placeholder="e.g. Monthly Hosting" />
+  <button onclick="generate()">Generate Link + Embed</button>
 
-      <button onclick="generate()">Generate Link + Embed</button>
+  <div id="result"></div>
+</div>
 
-      <div id="result"></div>
-    </div>
-  </section>
-
-  <footer>
+  </section>  <footer>
     © 2025 NoCodePay.xyz • Secure payments for the rest of us.
-  </footer>
-
-  <script>
+  </footer>  <script>
     function generate() {
       const amt = document.getElementById('amount').value.trim();
       const note = document.getElementById('note').value.trim();
@@ -185,7 +173,7 @@
       }
 
       const url = `https://nocodepay.xyz/pay?amount=${amt}&note=${encodeURIComponent(note)}`;
-      const buttonCode = `<a href="${url}" style="background:#6366f1;color:white;padding:12px 20px;border-radius:6px;text-decoration:none;">Pay $${amt} for ${note}</a>`;
+      const buttonCode = `<a href=\"${url}\" style=\"background:#6366f1;color:white;padding:12px 20px;border-radius:6px;text-decoration:none;\">Pay $${amt} for ${note}</a>`;
 
       result.innerHTML = `
         <div class="output">
@@ -198,6 +186,5 @@
         </div>
       `;
     }
-  </script>
-</body>
+  </script></body>
 </html>
