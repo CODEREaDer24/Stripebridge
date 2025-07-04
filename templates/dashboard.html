@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard – NoCodePay</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <header class="dashboard-header">
+      <h1>Your Payment Links</h1>
+      <a href="/logout" class="logout">Logout</a>
+    </header>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="flash">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <form action="/generate-link" method="POST" class="link-form">
+      <input type="text" name="name" placeholder="Product Name" required />
+      <input type="number" step="0.01" name="price" placeholder="Price (USD)" required />
+      <input type="text" name="description" placeholder="Description" required />
+      <button type="submit">Generate Payment Link</button>
+    </form>
+
+    <section class="link-list">
+      {% for link in links %}
+        <div class="link-card">
+          <h3>{{ link.name }} – {{ link.price }}</h3>
+          <p>{{ link.description }}</p>
+          <a href="{{ link.url }}" target="_blank" class="link-url">{{ link.url }}</a>
+        </div>
+      {% else %}
+        <p>No links yet. Use the form above to create one.</p>
+      {% endfor %}
+    </section>
+  </div>
+</body>
+</html>
