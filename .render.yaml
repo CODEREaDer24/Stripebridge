@@ -1,7 +1,16 @@
 services:
   - type: web
     name: nocodepay
-    env: python
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "python main.py"
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn main:app
     plan: free
+    envVars:
+      - key: FLASK_SECRET_KEY
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: YOUR_DOMAIN
+        sync: false
+    autoDeploy: true
+    healthCheckPath: /
