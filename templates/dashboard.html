@@ -25,26 +25,31 @@
 
     <p>Welcome, {{ session['user'] }}.</p>
 
-    <form action="/generate-link" method="POST" class="link-form">
-      <input type="text" name="name" placeholder="Product Name" required />
-      <input type="number" step="0.01" name="price" placeholder="Price (USD)" required />
-      <input type="text" name="description" placeholder="Description" required />
-      <button type="submit">Create Payment Link</button>
-    </form>
+    {% if not connected %}
+      <p>You haven’t connected your Stripe account yet.</p>
+      <a href="/connect" class="cta-button">Connect Stripe</a>
+    {% else %}
+      <form action="/generate-link" method="POST" class="link-form">
+        <input type="text" name="name" placeholder="Product Name" required />
+        <input type="number" step="0.01" name="price" placeholder="Price (USD)" required />
+        <input type="text" name="description" placeholder="Description" required />
+        <button type="submit">Create Payment Link</button>
+      </form>
 
-    <section class="link-list">
-      {% if links %}
-        {% for link in links %}
-          <div class="link-card">
-            <h3>{{ link.name }} – {{ link.price }}</h3>
-            <p>{{ link.description }}</p>
-            <a href="{{ link.url }}" target="_blank">{{ link.url }}</a>
-          </div>
-        {% endfor %}
-      {% else %}
-        <p>No links yet. Create one above.</p>
-      {% endif %}
-    </section>
+      <section class="link-list">
+        {% if links %}
+          {% for link in links %}
+            <div class="link-card">
+              <h3>{{ link.name }} – {{ link.price }}</h3>
+              <p>{{ link.description }}</p>
+              <a href="{{ link.url }}" target="_blank">{{ link.url }}</a>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p>No links yet. Create one above.</p>
+        {% endif %}
+      </section>
+    {% endif %}
   </div>
 </body>
 </html>
