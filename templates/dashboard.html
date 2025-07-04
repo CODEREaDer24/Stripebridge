@@ -10,7 +10,7 @@
   <div class="dashboard-container">
     <header class="dashboard-header">
       <h1>Dashboard</h1>
-      <a href="/logout">Logout</a>
+      <a href="/logout" class="logout">Logout</a>
     </header>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -24,7 +24,27 @@
     {% endwith %}
 
     <p>Welcome, {{ session['user'] }}.</p>
-    <p>This is your dashboard. Payment link creation coming next.</p>
+
+    <form action="/generate-link" method="POST" class="link-form">
+      <input type="text" name="name" placeholder="Product Name" required />
+      <input type="number" step="0.01" name="price" placeholder="Price (USD)" required />
+      <input type="text" name="description" placeholder="Description" required />
+      <button type="submit">Create Payment Link</button>
+    </form>
+
+    <section class="link-list">
+      {% if links %}
+        {% for link in links %}
+          <div class="link-card">
+            <h3>{{ link.name }} – {{ link.price }}</h3>
+            <p>{{ link.description }}</p>
+            <a href="{{ link.url }}" target="_blank">{{ link.url }}</a>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p>No links yet. Create one above.</p>
+      {% endif %}
+    </section>
   </div>
 </body>
 </html>
