@@ -1,3 +1,4 @@
-flask
-gunicorn
+Flask
 stripe
+python-dotenv
+gunicorn
