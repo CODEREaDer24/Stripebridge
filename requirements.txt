@@ -1,5 +1,4 @@
 Flask
 stripe
-python-dotenv
 gunicorn
 werkzeug
