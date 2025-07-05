@@ -11,7 +11,6 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-# --- Create user table if not exists ---
 def init_db():
     conn = get_db_connection()
     conn.execute('''
@@ -25,6 +24,11 @@ def init_db():
     conn.close()
 
 init_db()
+
+# --- Home route ---
+@app.route('/')
+def home():
+    return render_template('index.html')
 
 # --- SIGNUP route ---
 @app.route('/signup', methods=['GET', 'POST'])
@@ -64,7 +68,7 @@ def login():
             return redirect('/login')
     return render_template('login.html')
 
-# --- DASHBOARD route (basic auth check) ---
+# --- DASHBOARD route ---
 @app.route('/dashboard')
 def dashboard():
     if 'user' not in session:
