@@ -1,29 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login – NoCodePay</title>
-  <link rel="stylesheet" href="/static/style.css">
+  <meta charset="UTF-8">
+  <title>NoCodePay – Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-  <div class="login-container">
-    <h1>Login</h1>
+  <h2>Login to NoCodePay</h2>
+  <form action="/login" method="post">
+    <label>Email:</label><br>
+    <input type="email" name="email" required><br><br>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <ul class="flash">
-          {% for category, message in messages %}
-            <li class="{{ category }}">{{ message }}</li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
+    <label>Password:</label><br>
+    <input type="password" name="password" required><br><br>
 
-    <form method="POST">
-      <input type="email" name="email" placeholder="Email address" required />
-      <button type="submit">Log In</button>
-    </form>
-  </div>
+    <button type="submit">Log In</button>
+  </form>
+  <p>Don't have an account? <a href="/signup">Sign up here</a>.</p>
 </body>
 </html>
