@@ -1,4 +1,6 @@
 Flask
 stripe
 gunicorn
+python-dotenv
+psycopg2-binary
 werkzeug
