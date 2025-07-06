@@ -1,59 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>NoCodePay – Easy Payment Links</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: #f0f4f8;
-      color: #1f2937;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 40px 20px;
-    }
-    h1 {
-      font-size: 2.2em;
-      color: #111827;
-      margin-bottom: 10px;
-    }
-    p {
-      font-size: 1.1em;
-      color: #4b5563;
-      margin-bottom: 30px;
-    }
-    a.button {
-      display: inline-block;
-      margin: 0 10px;
-      padding: 12px 22px;
-      background-color: #0070f3;
-      color: white;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: background 0.2s;
-    }
-    a.button:hover {
-      background-color: #0059c1;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Dashboard - NoCodePay</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
+    <header>
+        <nav class="nav">
+            <a href="/profile">Profile</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
 
-  <h1>Welcome to NoCodePay</h1>
-  <p>Easy payment links. No code required.</p>
+    <section class="dashboard">
+        <h1>Welcome, {{ email }}</h1>
 
-  <div>
-    <a href="/signup" class="button">Sign Up</a>
-    <a href="/login" class="button">Log In</a>
-  </div>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flash">
+                    {% for msg in messages %}
+                        <li>{{ msg }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
 
+        <form method="POST" action="/create_link">
+            <input type="number" name="amount" placeholder="Amount in USD" min="0" step="0.01" required>
+            <button type="submit" class="btn-primary">Create Payment Link</button>
+        </form>
+
+        <h2>Your Payment Links</h2>
+        {% if links %}
+            <ul class="link-list">
+                {% for link in links %}
+                    <li>
+                        <a href="{{ link[1] }}" target="_blank">{{ link[1] }}</a>
+                        <form method="POST" action="/delete_link/{{ link[0] }}" style="display:inline;">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No links yet. Create one above.</p>
+        {% endif %}
+
+        <h3>Stats</h3>
+        <p>Total Links: {{ stats[0] }}<br>
+        Last Created: {{ stats[1] if stats[1] else 'N/A' }}</p>
+    </section>
 </body>
 </html>
