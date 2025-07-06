@@ -1,34 +1,51 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>NoCodePay – Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary: #0070f3;
+      --bg: #f1f5f9;
+      --text: #1f2937;
+      --card: #ffffff;
+      --muted: #6b7280;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f4f6f8;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
     }
 
     header {
-      background-color: #0070f3;
-      padding: 15px 30px;
+      background: linear-gradient(to right, #0070f3, #00b4d8);
+      padding: 20px 30px;
       color: white;
       font-size: 24px;
+      font-weight: 600;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
     main {
-      max-width: 700px;
-      margin: 40px auto;
-      background: white;
+      max-width: 800px;
+      margin: 30px auto;
       padding: 30px;
+      background-color: var(--card);
       border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     }
 
     h2 {
       margin-top: 0;
       font-size: 22px;
-      color: #333;
     }
 
     .buttons {
@@ -36,66 +53,77 @@
     }
 
     .button {
+      display: inline-block;
       padding: 10px 18px;
-      background: #0070f3;
+      background-color: var(--primary);
       color: white;
-      text-decoration: none;
+      border: none;
       border-radius: 6px;
-      margin-right: 10px;
+      text-decoration: none;
       font-size: 14px;
+      cursor: pointer;
+      margin-right: 10px;
     }
 
     .button.logout {
-      background: #999;
+      background-color: #6b7280;
     }
 
     ul {
-      padding-left: 0;
       list-style: none;
+      padding-left: 0;
     }
 
-    li.link-item {
-      background: #f1f5f9;
-      padding: 12px;
-      border-radius: 6px;
-      margin-bottom: 10px;
+    li.link-card {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      background: #f9fafb;
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border-left: 5px solid var(--primary);
       font-size: 14px;
     }
 
     .copy-btn {
-      background: #0070f3;
+      background-color: var(--primary);
       color: white;
       border: none;
+      padding: 6px 10px;
       border-radius: 4px;
-      padding: 4px 8px;
       font-size: 12px;
       cursor: pointer;
     }
 
-    .copy-btn:hover {
-      background: #0055c1;
+    .empty {
+      color: var(--muted);
+      font-style: italic;
+      margin-top: 10px;
     }
 
-    .empty {
-      color: #777;
-      font-style: italic;
+    @media (max-width: 600px) {
+      main {
+        padding: 20px;
+      }
+      .button, .copy-btn {
+        font-size: 13px;
+        padding: 8px 14px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <header>NoCodePay</header>
+  <header>NoCodePay Dashboard</header>
 
   <main>
     <h2>Welcome, {{ email }}</h2>
-    <p>This is your dashboard. Create and manage your payment links below.</p>
+    <p>Create and manage your Stripe payment links.</p>
 
     <div class="buttons">
       <form action="/create_link" method="post" style="display:inline;">
-        <button type="submit" class="button">Create Payment Link</button>
+        <button type="submit" class="button">+ Create Link</button>
       </form>
       <a href="/logout" class="button logout">Log Out</a>
     </div>
@@ -103,12 +131,12 @@
     <h3>Your Payment Links</h3>
     <ul>
       {% for link in links %}
-        <li class="link-item">
+        <li class="link-card">
           <a href="{{ link['url'] }}" target="_blank">{{ link['url'] }}</a>
           <button class="copy-btn" onclick="navigator.clipboard.writeText('{{ link['url'] }}')">Copy</button>
         </li>
       {% else %}
-        <li class="link-item empty">No links yet. Hit that blue button up there 👆</li>
+        <p class="empty">No links yet. Click “Create Link” to get started.</p>
       {% endfor %}
     </ul>
   </main>
