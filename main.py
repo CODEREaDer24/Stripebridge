@@ -1,11 +1,14 @@
 from flask import Flask, render_template, request, redirect, session, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
+import stripe
+import os
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key_here'  # Replace with a secure key
+app.secret_key = os.getenv("SECRET_KEY", "changeme12345")
+stripe.api_key = os.getenv("STRIPE_SECRET_KEY", "sk_test_YOUR_KEY_HERE")
 
-# --- SQLite DB setup ---
+# --- DB setup ---
 def get_db_connection():
     conn = sqlite3.connect('users.db')
     conn.row_factory = sqlite3.Row
@@ -20,17 +23,22 @@ def init_db():
             password TEXT NOT NULL
         )
     ''')
+    conn.execute('''
+        CREATE TABLE IF NOT EXISTS links (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            email TEXT NOT NULL,
+            url TEXT NOT NULL
+        )
+    ''')
     conn.commit()
     conn.close()
 
 init_db()
 
-# --- Home route ---
 @app.route('/')
 def home():
     return render_template('index.html')
 
-# --- SIGNUP route ---
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
@@ -50,7 +58,6 @@ def signup():
             return redirect('/signup')
     return render_template('signup.html')
 
-# --- LOGIN route ---
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -68,14 +75,38 @@ def login():
             return redirect('/login')
     return render_template('login.html')
 
-# --- DASHBOARD route ---
 @app.route('/dashboard')
 def dashboard():
     if 'user' not in session:
         return redirect('/login')
-    return f"<h2>Welcome, {session['user']}!<br><a href='/logout'>Logout</a></h2>"
+    conn = get_db_connection()
+    links = conn.execute('SELECT * FROM links WHERE email = ?', (session['user'],)).fetchall()
+    conn.close()
+    return render_template('dashboard.html', email=session['user'], links=links)
 
-# --- LOGOUT route ---
+@app.route('/create_link', methods=['POST'])
+def create_link():
+    if 'user' not in session:
+        return redirect('/login')
+
+    # Create Stripe product and payment link
+    product = stripe.Product.create(name="NoCodePay Custom Link")
+    price = stripe.Price.create(
+        product=product.id,
+        unit_amount=500,  # $5.00
+        currency="usd"
+    )
+    link = stripe.PaymentLink.create(
+        line_items=[{"price": price.id, "quantity": 1}]
+    )
+
+    conn = get_db_connection()
+    conn.execute('INSERT INTO links (email, url) VALUES (?, ?)', (session['user'], link.url))
+    conn.commit()
+    conn.close()
+
+    return redirect('/dashboard')
+
 @app.route('/logout')
 def logout():
     session.pop('user', None)
