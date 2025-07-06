@@ -1,11 +1,59 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>NoCodePay</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NoCodePay – Easy Payment Links</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #f0f4f8;
+      color: #1f2937;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    h1 {
+      font-size: 2.2em;
+      color: #111827;
+      margin-bottom: 10px;
+    }
+    p {
+      font-size: 1.1em;
+      color: #4b5563;
+      margin-bottom: 30px;
+    }
+    a.button {
+      display: inline-block;
+      margin: 0 10px;
+      padding: 12px 22px;
+      background-color: #0070f3;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    a.button:hover {
+      background-color: #0059c1;
+    }
+  </style>
 </head>
 <body>
+
   <h1>Welcome to NoCodePay</h1>
-  <p>Easy payment links, no code required.</p>
-  <a href="/signup">Sign up</a> | <a href="/login">Log in</a>
+  <p>Easy payment links. No code required.</p>
+
+  <div>
+    <a href="/signup" class="button">Sign Up</a>
+    <a href="/login" class="button">Log In</a>
+  </div>
+
 </body>
 </html>
