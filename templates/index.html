@@ -3,77 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NoCodePay — Payment Links in Seconds</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <title>NoCodePay</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-
-    <header class="navbar">
-        <div class="logo">NoCodePay</div>
-        <nav>
-            <a href="/features">Features</a>
-            <a href="/pricing">Pricing</a>
-            <a href="/login" class="login-btn">Login</a>
-            <a href="/signup" class="cta-btn">Get Started</a>
+    <header>
+        <nav class="nav">
+            <a href="#features">Features</a>
+            <a href="#pricing">Pricing</a>
+            <a href="/login">Login</a>
+            <a href="/signup" class="cta">Get Started</a>
         </nav>
     </header>
 
     <section class="hero">
         <h1>Collect Payments. Instantly.</h1>
         <p>Create and share payment links with zero code. Perfect for indie builders, freelancers, and no-code devs.</p>
-        <a href="/signup" class="hero-cta">Start Free</a>
-        <div class="trust-logos">
-            <img src="/static/stripe.svg" alt="Stripe">
-            <img src="/static/render.svg" alt="Render">
-            <img src="/static/github.svg" alt="GitHub">
-        </div>
+        <a href="/signup" class="btn-primary">Start Free</a>
     </section>
 
-    <section class="how-it-works">
+    <section id="features">
         <h2>How it Works</h2>
-        <div class="steps">
-            <div>
-                <h3>1. Sign Up</h3>
-                <p>Create a free account. Takes 30 seconds.</p>
-            </div>
-            <div>
-                <h3>2. Connect Stripe</h3>
-                <p>Securely connect your Stripe account in one click.</p>
-            </div>
-            <div>
-                <h3>3. Share Your Link</h3>
-                <p>Sell. Get paid. Track revenue. No code needed.</p>
-            </div>
-        </div>
+        <ul>
+            <li>🧠 Simple setup</li>
+            <li>🔗 Share your link</li>
+            <li>💸 Get paid</li>
+        </ul>
     </section>
 
-    <section class="features">
-        <h2>Why NoCodePay?</h2>
-        <div class="feature-grid">
-            <div><h4>⚡ Fast Setup</h4><p>Up and running in minutes.</p></div>
-            <div><h4>🔗 Custom Links</h4><p>Your product, your price.</p></div>
-            <div><h4>📊 Track Payments</h4><p>Dashboard built for simplicity.</p></div>
-            <div><h4>🔒 Powered by Stripe</h4><p>Bank-level security.</p></div>
-        </div>
-    </section>
-
-    <section class="testimonials">
-        <h2>Built for Builders</h2>
-        <blockquote>
-            “I was charging clients in under 5 minutes. NoCodePay is my new favorite tool.”
-            <br>— Sarah, freelance designer
-        </blockquote>
-    </section>
-
-    <section class="cta-final">
-        <h2>Start for Free</h2>
-        <p>Join indie creators and makers who are already getting paid with NoCodePay.</p>
-        <a href="/signup" class="cta-btn-large">Create Your Link</a>
+    <section id="pricing">
+        <h2>Pricing</h2>
+        <p>Free plan available. Paid tiers for power users.</p>
     </section>
 
     <footer>
-        <p>&copy; 2025 NoCodePay. Built by founders, for founders.</p>
+        <p>© 2025 NoCodePay</p>
     </footer>
-
 </body>
 </html>
