@@ -8,138 +8,143 @@
   <style>
     :root {
       --primary: #0070f3;
-      --bg: #f1f5f9;
+      --gray: #f1f5f9;
       --text: #1f2937;
-      --card: #ffffff;
-      --muted: #6b7280;
     }
-
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
-      background-color: var(--bg);
+      background: var(--gray);
       color: var(--text);
     }
-
     header {
       background: linear-gradient(to right, #0070f3, #00b4d8);
       padding: 20px 30px;
       color: white;
       font-size: 24px;
       font-weight: 600;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
-
     main {
       max-width: 800px;
-      margin: 30px auto;
+      margin: 40px auto;
+      background: white;
       padding: 30px;
-      background-color: var(--card);
       border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
-
-    h2 {
-      margin-top: 0;
-      font-size: 22px;
+    h2 { margin-top: 0; }
+    .metrics {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 20px;
     }
-
-    .buttons {
-      margin: 20px 0;
+    form.inline {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
     }
-
+    input[type="number"] {
+      padding: 10px;
+      width: 120px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
     .button {
-      display: inline-block;
-      padding: 10px 18px;
       background-color: var(--primary);
       color: white;
+      padding: 10px 18px;
       border: none;
       border-radius: 6px;
-      text-decoration: none;
-      font-size: 14px;
       cursor: pointer;
-      margin-right: 10px;
     }
-
-    .button.logout {
+    .logout {
       background-color: #6b7280;
+      float: right;
     }
-
-    ul {
-      list-style: none;
-      padding-left: 0;
-    }
-
+    ul { list-style: none; padding-left: 0; }
     li.link-card {
+      background: #f9fafb;
+      padding: 12px 20px;
+      border-radius: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #f9fafb;
-      padding: 15px 20px;
-      border-radius: 8px;
       margin-bottom: 10px;
-      border-left: 5px solid var(--primary);
-      font-size: 14px;
+      border-left: 4px solid var(--primary);
     }
-
+    .copy-btn, .delete-btn {
+      padding: 6px 10px;
+      font-size: 12px;
+      margin-left: 5px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
     .copy-btn {
       background-color: var(--primary);
       color: white;
       border: none;
-      padding: 6px 10px;
-      border-radius: 4px;
+    }
+    .delete-btn {
+      background-color: #ef4444;
+      color: white;
+      border: none;
+    }
+    .copied-msg {
+      color: green;
       font-size: 12px;
-      cursor: pointer;
-    }
-
-    .empty {
-      color: var(--muted);
-      font-style: italic;
-      margin-top: 10px;
-    }
-
-    @media (max-width: 600px) {
-      main {
-        padding: 20px;
-      }
-      .button, .copy-btn {
-        font-size: 13px;
-        padding: 8px 14px;
-      }
+      margin-top: 5px;
     }
   </style>
 </head>
 <body>
 
-  <header>NoCodePay Dashboard</header>
+<header>NoCodePay Dashboard</header>
 
-  <main>
-    <h2>Welcome, {{ email }}</h2>
-    <p>Create and manage your Stripe payment links.</p>
+<main>
+  <h2>Welcome, {{ email }}</h2>
 
-    <div class="buttons">
-      <form action="/create_link" method="post" style="display:inline;">
-        <button type="submit" class="button">+ Create Link</button>
-      </form>
-      <a href="/logout" class="button logout">Log Out</a>
-    </div>
+  <div class="metrics">
+    <p>Total links: {{ stats[0] or 0 }}</p>
+    <p>Last created: {{ stats[1] or 'None yet' }}</p>
+  </div>
 
-    <h3>Your Payment Links</h3>
-    <ul>
-      {% for link in links %}
-        <li class="link-card">
-          <a href="{{ link['url'] }}" target="_blank">{{ link['url'] }}</a>
-          <button class="copy-btn" onclick="navigator.clipboard.writeText('{{ link['url'] }}')">Copy</button>
-        </li>
-      {% else %}
-        <p class="empty">No links yet. Click “Create Link” to get started.</p>
-      {% endfor %}
-    </ul>
-  </main>
+  <form action="/create_link" method="post" class="inline">
+    <input type="number" step="0.01" min="0.50" name="amount" placeholder="Price ($)" required>
+    <button type="submit" class="button">Create Link</button>
+    <a href="/logout" class="button logout">Log Out</a>
+  </form>
+
+  <h3>Your Payment Links</h3>
+  <ul>
+    {% for link in links %}
+      <li class="link-card">
+        <div>
+          <a href="{{ link[1] }}" target="_blank">{{ link[1] }}</a><br>
+          <small>ID: {{ link[0] }}</small>
+        </div>
+        <div>
+          <button class="copy-btn" onclick="copyToClipboard('{{ link[1] }}', this)">Copy</button>
+          <form action="/delete_link/{{ link[0] }}" method="post" style="display:inline;">
+            <button class="delete-btn">Delete</button>
+          </form>
+        </div>
+      </li>
+    {% else %}
+      <p>No links yet. Start by creating one above.</p>
+    {% endfor %}
+  </ul>
+</main>
+
+<script>
+  function copyToClipboard(text, btn) {
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = "Copied!";
+      setTimeout(() => { btn.textContent = "Copy"; }, 1200);
+    });
+  }
+</script>
 
 </body>
 </html>
