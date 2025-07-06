@@ -1,127 +1,143 @@
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f7f7f7;
-  color: #333;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f8f9fa;
+    color: #212529;
 }
 
 a {
-  color: #007bff;
-  text-decoration: none;
+    text-decoration: none;
+    color: inherit;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 2rem;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.navbar .logo {
+    font-weight: bold;
+    font-size: 1.4rem;
+}
+
+.navbar nav a {
+    margin-left: 1.5rem;
+    font-weight: 500;
+}
+
+.navbar .cta-btn {
+    padding: 0.5rem 1rem;
+    background-color: #0069ed;
+    color: white;
+    border-radius: 5px;
+    font-weight: 600;
 }
 
 .hero {
-  background: #111;
-  color: #fff;
-  text-align: center;
-  padding: 60px 20px;
+    text-align: center;
+    padding: 4rem 1rem 3rem;
+    background: linear-gradient(to right, #e3f2fd, #f1f8ff);
 }
 
 .hero h1 {
-  font-size: 2.5em;
-  margin-bottom: 0.5em;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
 }
 
 .hero p {
-  font-size: 1.2em;
-  margin-bottom: 1em;
+    font-size: 1.2rem;
+    color: #555;
+    max-width: 600px;
+    margin: 0 auto 2rem;
 }
 
-.cta-button {
-  background: #ff9900;
-  color: #000;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
+.hero .hero-cta {
+    background-color: #0069ed;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: bold;
 }
 
-.features {
-  padding: 40px 20px;
-  max-width: 900px;
-  margin: auto;
+.trust-logos {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
-.feature {
-  margin-bottom: 30px;
+.trust-logos img {
+    height: 32px;
+    opacity: 0.8;
+}
+
+.how-it-works, .features, .testimonials, .cta-final {
+    text-align: center;
+    padding: 4rem 1rem;
+}
+
+.how-it-works .steps, .feature-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.steps div, .feature-grid div {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 0 6px rgba(0,0,0,0.05);
+    width: 250px;
+}
+
+.testimonials blockquote {
+    max-width: 600px;
+    margin: 2rem auto;
+    font-style: italic;
+    color: #333;
+}
+
+.cta-final .cta-btn-large {
+    background-color: #28a745;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-top: 1rem;
+    display: inline-block;
 }
 
 footer {
-  text-align: center;
-  padding: 20px;
-  background: #eee;
-  font-size: 0.9em;
-  color: #777;
+    text-align: center;
+    padding: 2rem;
+    background: #f1f1f1;
+    font-size: 0.9rem;
+    color: #666;
 }
 
-.login-container,
-.dashboard-container {
-  max-width: 500px;
-  margin: 60px auto;
-  padding: 20px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
+@media (max-width: 768px) {
+    .steps div, .feature-grid div {
+        width: 90%;
+    }
 
-form input,
-form button {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-sizing: border-box;
-}
+    .navbar nav a {
+        margin-left: 1rem;
+    }
 
-form button {
-  background-color: #28a745;
-  color: white;
-  font-weight: bold;
-  border: none;
-  cursor: pointer;
-}
-
-.note {
-  font-size: 0.9em;
-  color: #555;
-  text-align: center;
-}
-
-.flash {
-  list-style: none;
-  padding: 10px;
-  margin: 10px 0;
-  background: #f8d7da;
-  border: 1px solid #f5c6cb;
-  color: #721c24;
-  border-radius: 6px;
-}
-
-.dashboard-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logout {
-  font-size: 0.9em;
-  color: #dc3545;
-}
-
-.link-card {
-  background: #f2f2f2;
-  padding: 15px;
-  margin-top: 15px;
-  border-radius: 10px;
-}
-
-.link-url {
-  display: inline-block;
-  word-break: break-all;
-  font-size: 0.9em;
-  margin-top: 8px;
-  color: #007bff;
+    .hero h1 {
+        font-size: 2rem;
+    }
 }
