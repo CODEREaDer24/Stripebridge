@@ -1,66 +1,117 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Your Dashboard – NoCodePay</title>
+  <title>NoCodePay – Dashboard</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f6f8;
+    }
+
+    header {
+      background-color: #0070f3;
+      padding: 15px 30px;
+      color: white;
+      font-size: 24px;
+    }
+
+    main {
       max-width: 700px;
       margin: 40px auto;
-      padding: 20px;
-      background-color: #f0f4f8;
-      border-radius: 10px;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
+
     h2 {
+      margin-top: 0;
+      font-size: 22px;
       color: #333;
     }
+
+    .buttons {
+      margin: 20px 0;
+    }
+
     .button {
-      display: inline-block;
-      background-color: #0070f3;
-      color: white;
       padding: 10px 18px;
-      margin-top: 10px;
-      margin-right: 10px;
+      background: #0070f3;
+      color: white;
       text-decoration: none;
       border-radius: 6px;
+      margin-right: 10px;
       font-size: 14px;
     }
-    .button:hover {
-      background-color: #0059c1;
+
+    .button.logout {
+      background: #999;
     }
-    .link-list {
-      margin-top: 20px;
+
+    ul {
       padding-left: 0;
-    }
-    .link-list li {
       list-style: none;
-      margin-bottom: 10px;
-      background: white;
-      padding: 10px;
-      border-radius: 5px;
     }
-    .link-list a {
-      text-decoration: none;
-      color: #0070f3;
+
+    li.link-item {
+      background: #f1f5f9;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    .copy-btn {
+      background: #0070f3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .copy-btn:hover {
+      background: #0055c1;
+    }
+
+    .empty {
+      color: #777;
+      font-style: italic;
     }
   </style>
 </head>
 <body>
-  <h2>Welcome, {{ email }}</h2>
-  <p>This is your dashboard. Create and manage your payment links below.</p>
 
-  <form action="/create_link" method="post">
-    <button class="button" type="submit">Create Payment Link</button>
-  </form>
-  <a href="/logout" class="button">Log Out</a>
+  <header>NoCodePay</header>
 
-  <h3>Your Payment Links</h3>
-  <ul class="link-list">
-    {% for link in links %}
-      <li><a href="{{ link['url'] }}" target="_blank">{{ link['url'] }}</a></li>
-    {% else %}
-      <li>No links yet. Hit that blue button up there 👆</li>
-    {% endfor %}
-  </ul>
+  <main>
+    <h2>Welcome, {{ email }}</h2>
+    <p>This is your dashboard. Create and manage your payment links below.</p>
+
+    <div class="buttons">
+      <form action="/create_link" method="post" style="display:inline;">
+        <button type="submit" class="button">Create Payment Link</button>
+      </form>
+      <a href="/logout" class="button logout">Log Out</a>
+    </div>
+
+    <h3>Your Payment Links</h3>
+    <ul>
+      {% for link in links %}
+        <li class="link-item">
+          <a href="{{ link['url'] }}" target="_blank">{{ link['url'] }}</a>
+          <button class="copy-btn" onclick="navigator.clipboard.writeText('{{ link['url'] }}')">Copy</button>
+        </li>
+      {% else %}
+        <li class="link-item empty">No links yet. Hit that blue button up there 👆</li>
+      {% endfor %}
+    </ul>
+  </main>
+
 </body>
 </html>
