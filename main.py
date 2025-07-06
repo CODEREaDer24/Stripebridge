@@ -9,23 +9,20 @@ app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "changeme123")
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY", "sk_test_...")
 
-# --- DATABASE CONFIG ---
 def get_db_connection():
     result = urlparse(os.getenv("DATABASE_URL"))
-    username = result.username
-    password = result.password
-    database = result.path[1:]
-    hostname = result.hostname
-    port = result.port
     return psycopg2.connect(
-        database=database,
-        user=username,
-        password=password,
-        host=hostname,
-        port=port
+        database=result.path[1:],
+        user=result.username,
+        password=result.password,
+        host=result.hostname,
+        port=result.port
     )
 
-# --- SIGNUP ---
+@app.route('/')
+def home():
+    return render_template('index.html')
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
@@ -42,18 +39,16 @@ def signup():
             conn.close()
             session['user'] = email
             return redirect('/dashboard')
-        except Exception:
+        except:
             flash('Email already registered.')
             return redirect('/signup')
     return render_template('signup.html')
 
-# --- LOGIN ---
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         email = request.form['email'].strip().lower()
         password = request.form['password']
-
         conn = get_db_connection()
         cur = conn.cursor()
         cur.execute("SELECT * FROM users WHERE email = %s", (email,))
@@ -69,13 +64,11 @@ def login():
             return redirect('/login')
     return render_template('login.html')
 
-# --- LOGOUT ---
 @app.route('/logout')
 def logout():
     session.pop('user', None)
     return redirect('/login')
 
-# --- DASHBOARD ---
 @app.route('/dashboard')
 def dashboard():
     if 'user' not in session:
@@ -90,27 +83,22 @@ def dashboard():
     conn.close()
     return render_template('dashboard.html', email=session['user'], links=links, stats=stats)
 
-# --- CREATE LINK ---
 @app.route('/create_link', methods=['POST'])
 def create_link():
     if 'user' not in session:
         return redirect('/login')
-
     amount = int(float(request.form['amount']) * 100)
-    product = stripe.Product.create(name="Custom NoCodePay Link")
+    product = stripe.Product.create(name="NoCodePay Link")
     price = stripe.Price.create(product=product.id, unit_amount=amount, currency="usd")
     link = stripe.PaymentLink.create(line_items=[{"price": price.id, "quantity": 1}])
-
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute("INSERT INTO links (email, url) VALUES (%s, %s)", (session['user'], link.url))
     conn.commit()
     cur.close()
     conn.close()
-
     return redirect('/dashboard')
 
-# --- DELETE LINK ---
 @app.route('/delete_link/<int:link_id>', methods=['POST'])
 def delete_link(link_id):
     if 'user' not in session:
@@ -123,7 +111,6 @@ def delete_link(link_id):
     conn.close()
     return redirect('/dashboard')
 
-# --- PROFILE PAGE ---
 @app.route('/profile')
 def profile():
     if 'user' not in session:
