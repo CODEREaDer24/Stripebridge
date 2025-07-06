@@ -1,44 +1,31 @@
 from flask import Flask, render_template, request, redirect, session, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
-import sqlite3
-import stripe
+import psycopg2
 import os
+import stripe
+from urllib.parse import urlparse
 
 app = Flask(__name__)
-app.secret_key = os.getenv("SECRET_KEY", "changeme12345")
-stripe.api_key = os.getenv("STRIPE_SECRET_KEY", "sk_test_YOUR_KEY_HERE")
+app.secret_key = os.getenv("SECRET_KEY", "changeme123")
+stripe.api_key = os.getenv("STRIPE_SECRET_KEY", "sk_test_...")
 
-# --- DB setup ---
+# --- DATABASE CONFIG ---
 def get_db_connection():
-    conn = sqlite3.connect('users.db')
-    conn.row_factory = sqlite3.Row
-    return conn
+    result = urlparse(os.getenv("DATABASE_URL"))
+    username = result.username
+    password = result.password
+    database = result.path[1:]
+    hostname = result.hostname
+    port = result.port
+    return psycopg2.connect(
+        database=database,
+        user=username,
+        password=password,
+        host=hostname,
+        port=port
+    )
 
-def init_db():
-    conn = get_db_connection()
-    conn.execute('''
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            email TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL
-        )
-    ''')
-    conn.execute('''
-        CREATE TABLE IF NOT EXISTS links (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            email TEXT NOT NULL,
-            url TEXT NOT NULL
-        )
-    ''')
-    conn.commit()
-    conn.close()
-
-init_db()
-
-@app.route('/')
-def home():
-    return render_template('index.html')
-
+# --- SIGNUP ---
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
@@ -48,66 +35,97 @@ def signup():
 
         try:
             conn = get_db_connection()
-            conn.execute('INSERT INTO users (email, password) VALUES (?, ?)', (email, hashed_pw))
+            cur = conn.cursor()
+            cur.execute("INSERT INTO users (email, password) VALUES (%s, %s)", (email, hashed_pw))
             conn.commit()
+            cur.close()
             conn.close()
             session['user'] = email
             return redirect('/dashboard')
-        except sqlite3.IntegrityError:
+        except Exception:
             flash('Email already registered.')
             return redirect('/signup')
     return render_template('signup.html')
 
+# --- LOGIN ---
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         email = request.form['email'].strip().lower()
         password = request.form['password']
+
         conn = get_db_connection()
-        user = conn.execute('SELECT * FROM users WHERE email = ?', (email,)).fetchone()
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM users WHERE email = %s", (email,))
+        user = cur.fetchone()
+        cur.close()
         conn.close()
 
-        if user and check_password_hash(user['password'], password):
-            session['user'] = user['email']
+        if user and check_password_hash(user[2], password):
+            session['user'] = user[1]
             return redirect('/dashboard')
         else:
-            flash('Invalid login credentials.')
+            flash('Invalid login.')
             return redirect('/login')
     return render_template('login.html')
 
+# --- LOGOUT ---
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    return redirect('/login')
+
+# --- DASHBOARD ---
 @app.route('/dashboard')
 def dashboard():
     if 'user' not in session:
         return redirect('/login')
     conn = get_db_connection()
-    links = conn.execute('SELECT * FROM links WHERE email = ?', (session['user'],)).fetchall()
+    cur = conn.cursor()
+    cur.execute("SELECT id, url FROM links WHERE email = %s ORDER BY id DESC", (session['user'],))
+    links = cur.fetchall()
+    cur.execute("SELECT COUNT(*), MAX(created_at) FROM links WHERE email = %s", (session['user'],))
+    stats = cur.fetchone()
+    cur.close()
     conn.close()
-    return render_template('dashboard.html', email=session['user'], links=links)
+    return render_template('dashboard.html', email=session['user'], links=links, stats=stats)
 
+# --- CREATE LINK ---
 @app.route('/create_link', methods=['POST'])
 def create_link():
     if 'user' not in session:
         return redirect('/login')
 
-    # Create Stripe product and payment link
-    product = stripe.Product.create(name="NoCodePay Custom Link")
-    price = stripe.Price.create(
-        product=product.id,
-        unit_amount=500,  # $5.00
-        currency="usd"
-    )
-    link = stripe.PaymentLink.create(
-        line_items=[{"price": price.id, "quantity": 1}]
-    )
+    amount = int(float(request.form['amount']) * 100)
+    product = stripe.Product.create(name="Custom NoCodePay Link")
+    price = stripe.Price.create(product=product.id, unit_amount=amount, currency="usd")
+    link = stripe.PaymentLink.create(line_items=[{"price": price.id, "quantity": 1}])
 
     conn = get_db_connection()
-    conn.execute('INSERT INTO links (email, url) VALUES (?, ?)', (session['user'], link.url))
+    cur = conn.cursor()
+    cur.execute("INSERT INTO links (email, url) VALUES (%s, %s)", (session['user'], link.url))
     conn.commit()
+    cur.close()
     conn.close()
 
     return redirect('/dashboard')
 
-@app.route('/logout')
-def logout():
-    session.pop('user', None)
-    return redirect('/login')
+# --- DELETE LINK ---
+@app.route('/delete_link/<int:link_id>', methods=['POST'])
+def delete_link(link_id):
+    if 'user' not in session:
+        return redirect('/login')
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM links WHERE id = %s AND email = %s", (link_id, session['user']))
+    conn.commit()
+    cur.close()
+    conn.close()
+    return redirect('/dashboard')
+
+# --- PROFILE PAGE ---
+@app.route('/profile')
+def profile():
+    if 'user' not in session:
+        return redirect('/login')
+    return render_template('profile.html', email=session['user'])
