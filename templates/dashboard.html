@@ -1,55 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dashboard – NoCodePay</title>
-  <link rel="stylesheet" href="/static/style.css">
+  <title>Your Dashboard – NoCodePay</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #f0f4f8;
+      border-radius: 10px;
+    }
+    h2 {
+      color: #333;
+    }
+    .button {
+      display: inline-block;
+      background-color: #0070f3;
+      color: white;
+      padding: 10px 18px;
+      margin-top: 10px;
+      margin-right: 10px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    .button:hover {
+      background-color: #0059c1;
+    }
+    .link-list {
+      margin-top: 20px;
+      padding-left: 0;
+    }
+    .link-list li {
+      list-style: none;
+      margin-bottom: 10px;
+      background: white;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .link-list a {
+      text-decoration: none;
+      color: #0070f3;
+    }
+  </style>
 </head>
 <body>
-  <div class="dashboard-container">
-    <header class="dashboard-header">
-      <h1>Dashboard</h1>
-      <a href="/logout" class="logout">Logout</a>
-    </header>
+  <h2>Welcome, {{ email }}</h2>
+  <p>This is your dashboard. Create and manage your payment links below.</p>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <ul class="flash">
-          {% for category, message in messages %}
-            <li class="{{ category }}">{{ message }}</li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
+  <form action="/create_link" method="post">
+    <button class="button" type="submit">Create Payment Link</button>
+  </form>
+  <a href="/logout" class="button">Log Out</a>
 
-    <p>Welcome, {{ session['user'] }}.</p>
-
-    {% if not connected %}
-      <p>You haven’t connected your Stripe account yet.</p>
-      <a href="/connect" class="cta-button">Connect Stripe</a>
+  <h3>Your Payment Links</h3>
+  <ul class="link-list">
+    {% for link in links %}
+      <li><a href="{{ link['url'] }}" target="_blank">{{ link['url'] }}</a></li>
     {% else %}
-      <form action="/generate-link" method="POST" class="link-form">
-        <input type="text" name="name" placeholder="Product Name" required />
-        <input type="number" step="0.01" name="price" placeholder="Price (USD)" required />
-        <input type="text" name="description" placeholder="Description" required />
-        <button type="submit">Create Payment Link</button>
-      </form>
-
-      <section class="link-list">
-        {% if links %}
-          {% for link in links %}
-            <div class="link-card">
-              <h3>{{ link.name }} – {{ link.price }}</h3>
-              <p>{{ link.description }}</p>
-              <a href="{{ link.url }}" target="_blank">{{ link.url }}</a>
-            </div>
-          {% endfor %}
-        {% else %}
-          <p>No links yet. Create one above.</p>
-        {% endif %}
-      </section>
-    {% endif %}
-  </div>
+      <li>No links yet. Hit that blue button up there 👆</li>
+    {% endfor %}
+  </ul>
 </body>
 </html>
